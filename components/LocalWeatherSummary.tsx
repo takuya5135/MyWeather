@@ -45,7 +45,7 @@ export function LocalWeatherSummary({ latitude, longitude, placeName }: LocalWea
         setLoading(true)
         // Fetch current and daily weather
         fetch(
-            `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=Asia%2FTokyo`
+            `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=Asia%2FTokyo&models=jma_seam`
         )
             .then((res) => res.json())
             .then((data) => {
