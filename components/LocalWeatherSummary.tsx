@@ -39,28 +39,49 @@ export function LocalWeatherSummary({ latitude, longitude, placeName }: LocalWea
     const [daily, setDaily] = React.useState<any>(null)
     const [loading, setLoading] = React.useState(false)
 
+    const [error, setError] = React.useState<string | null>(null)
+
     React.useEffect(() => {
         if (!latitude || !longitude) return
 
         setLoading(true)
+        setError(null)
         // Fetch current and daily weather
+        // Removed specific model request to allow auto-selection (fixes 400 error)
         fetch(
-            `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=Asia%2FTokyo&models=jma_seam`
+            `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=Asia%2FTokyo`
         )
-            .then((res) => res.json())
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error(`Weather API Error: ${res.statusText}`)
+                }
+                return res.json()
+            })
             .then((data) => {
+                if (!data.current || !data.daily) {
+                    throw new Error("Invalid weather data received")
+                }
                 setCurrent(data.current)
                 setDaily(data.daily)
                 setLoading(false)
             })
             .catch((err) => {
                 console.error(err)
+                setError("天気情報の取得に失敗しました。")
                 setLoading(false)
             })
     }, [latitude, longitude])
 
     if (loading) {
         return <div className="flex justify-center p-4"><Loader2 className="animate-spin" /></div>
+    }
+
+    if (error) {
+        return (
+            <div className="p-4 text-center text-red-500 bg-red-50 rounded-lg border border-red-100">
+                <p>{error}</p>
+            </div>
+        )
     }
 
     if (!current || !daily) return null
