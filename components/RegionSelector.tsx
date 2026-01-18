@@ -38,11 +38,9 @@ export function RegionSelector({ onLocationSelect, selectedLocation }: RegionSel
 
         setLoading(true)
         try {
-            // Use Japanese language for search
+            // Use our local proxy to GSI API for better Japanese address search
             const res = await fetch(
-                `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(
-                    value
-                )}&count=5&language=ja&format=json`
+                `/api/search-location?q=${encodeURIComponent(value)}`
             )
             const data = await res.json()
             if (data.results) {
