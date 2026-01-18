@@ -101,7 +101,7 @@ export function RegionSelector({ onLocationSelect, selectedLocation }: RegionSel
             </div>
 
             {isOpen && results.length > 0 && (
-                <Card className="absolute top-full z-50 mt-1 w-full max-h-[300px] overflow-auto p-1">
+                <Card className="mt-1 w-full max-h-[300px] overflow-auto p-1">
                     <ul className="space-y-1">
                         {results.map((loc) => (
                             <li key={loc.id}>

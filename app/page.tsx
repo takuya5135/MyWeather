@@ -184,6 +184,8 @@ export default function Home() {
               placeName={location.name}
             />
 
+
+
             {/* External Providers */}
             <h3 className="text-lg font-semibold text-slate-700 mt-8">
               各社の詳細予報を見る
