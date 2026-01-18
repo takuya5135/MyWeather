@@ -100,10 +100,12 @@ export default function Home() {
       {/* Header */}
       <header className="bg-white border-b sticky top-0 z-10 shadow-sm">
         <div className="container mx-auto px-4 h-16 flex items-center gap-2">
-          <Sun className="h-6 w-6 text-orange-500" />
+          {/* <Sun className="h-6 w-6 text-orange-500" /> */}
+          <img src="/app-icon.png" alt="App Icon" className="h-10 w-auto" />
           <h1 className="text-xl font-bold bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">
-            天気予報まとめ
+            わが家の天気予報
           </h1>
+          <span className="text-xs text-slate-400 mt-1">Powered by Takuya H</span>
         </div>
       </header>
 
