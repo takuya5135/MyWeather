@@ -10,23 +10,26 @@ export async function GET(req: NextRequest) {
 
     try {
         const res = await fetch(
-            `https://msearch.gsi.go.jp/address-search/AddressSearch?q=${encodeURIComponent(query)}`
+            `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&count=10&language=ja&format=json`
         );
         const data = await res.json();
 
-        // GSI API returns an array of GeoJSON features
-        const results = data.map((item: any, index: number) => ({
-            id: index, // GSI doesn't provide stable IDs, so we use index
-            name: item.properties.title,
-            country_code: "JP",
-            latitude: item.geometry.coordinates[1],
-            longitude: item.geometry.coordinates[0],
-            admin1: "" // GSI title usually includes the full address
+        if (!data.results) {
+            return NextResponse.json({ results: [] });
+        }
+
+        const results = data.results.map((item: any) => ({
+            id: item.id,
+            name: item.name,
+            country_code: item.country_code,
+            latitude: item.latitude,
+            longitude: item.longitude,
+            admin1: item.admin1 || ""
         }));
 
         return NextResponse.json({ results });
     } catch (error) {
-        console.error("GSI Search error:", error);
+        console.error("Open-Meteo Search error:", error);
         return NextResponse.json({ results: [] }, { status: 500 });
     }
 }
